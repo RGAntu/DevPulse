@@ -1,12 +1,14 @@
-import app from "./app";
-import config from "./config";
+import app from "./app.js";
+import config from "./config/index";
+
 import { initDB } from "./db/db";
 
-const main = () => {
-  initDB()
+
+const main = async () => {        // ← async করো
+  await initDB();                  // ← await দাও, তারপর server start
   app.listen(config.port, () => {
-  console.log(`Server running on port ${config.port}`);
-});
-}
+    console.log(` Server running on port ${config.port}`);
+  });
+};
 
 main();
