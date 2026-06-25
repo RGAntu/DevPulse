@@ -5,6 +5,7 @@ import {
   createIssue,
   getAllIssues,
   getIssueById,
+  updateIssue,
  
 } from "./issues.services";
 
@@ -70,6 +71,52 @@ export const getIssueByIdController = async (req: Request, res: Response) => {
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Failed to fetch issue";
+    sendError(res, StatusCodes.INTERNAL_SERVER_ERROR, message);
+  }
+};
+
+// Update Issue 
+export const updateIssueController = async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(String(req.params["id"] ?? "0"));
+    const { title, description, type } = req.body as {
+      title?: string;
+      description?: string;
+      type?: string;
+    };
+
+    const existing = await getIssueById(id);
+    if (!existing) {
+      sendError(res, StatusCodes.NOT_FOUND, "Issue not found");
+      return;
+    }
+
+    const user = req.user!;
+
+    if (user.role === "contributor") {
+      if (existing.reporter?.id !== user.id) {
+        sendError(
+          res,
+          StatusCodes.FORBIDDEN,
+          "You can only update your own issues",
+        );
+        return;
+      }
+      if (existing.status !== "open") {
+        sendError(
+          res,
+          StatusCodes.CONFLICT,
+          "You can only update issues with open status",
+        );
+        return;
+      }
+    }
+
+    const data = await updateIssue(id, { title, description, type });
+    sendSuccess(res, StatusCodes.OK, "Issue updated successfully", data);
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to update issue";
     sendError(res, StatusCodes.INTERNAL_SERVER_ERROR, message);
   }
 };
