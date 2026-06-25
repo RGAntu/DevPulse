@@ -4,6 +4,7 @@ import { sendError, sendSuccess } from "../../utils/sendResponse";
 import {
   createIssue,
   getAllIssues,
+  getIssueById,
  
 } from "./issues.services";
 
@@ -49,6 +50,26 @@ export const getAllIssuesController = async (req: Request, res: Response) => {
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Failed to fetch issues";
+    sendError(res, StatusCodes.INTERNAL_SERVER_ERROR, message);
+  }
+};
+
+
+// Get Single Issue 
+export const getIssueByIdController = async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(String(req.params["id"] ?? "0"));
+    const data = await getIssueById(id);
+
+    if (!data) {
+      sendError(res, StatusCodes.NOT_FOUND, "Issue not found");
+      return;
+    }
+
+    sendSuccess(res, StatusCodes.OK, "Issue retrived successfully", data);
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to fetch issue";
     sendError(res, StatusCodes.INTERNAL_SERVER_ERROR, message);
   }
 };
