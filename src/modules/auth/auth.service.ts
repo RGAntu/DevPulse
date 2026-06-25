@@ -1,5 +1,3 @@
-// src/modules/auth/auth.service.ts
-
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { pool } from "../../db/db";
@@ -36,7 +34,7 @@ export const registerUser = async (
 
 // Login 
 export const loginUser = async (email: string, password: string) => {
-  // ১. User exists কিনা check করো
+
   const result = await pool.query(
     "SELECT * FROM users WHERE email = $1",
     [email]
