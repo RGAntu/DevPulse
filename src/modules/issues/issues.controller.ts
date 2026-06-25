@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { sendError, sendSuccess } from "../../utils/sendResponse";
 import {
   createIssue,
+  getAllIssues,
  
 } from "./issues.services";
 
@@ -34,3 +35,20 @@ export const createIssueController = async (req: Request, res: Response) => {
   }
 };
 
+// Get All Issues
+export const getAllIssuesController = async (req: Request, res: Response) => {
+  try {
+    const { sort, type, status } = req.query as {
+      sort?: string;
+      type?: string;
+      status?: string;
+    };
+
+    const data = await getAllIssues(sort, type, status);
+    sendSuccess(res, StatusCodes.OK, "Issues retrived successfully", data);
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to fetch issues";
+    sendError(res, StatusCodes.INTERNAL_SERVER_ERROR, message);
+  }
+};
