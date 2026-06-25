@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { sendError, sendSuccess } from "../../utils/sendResponse";
 import {
   createIssue,
+  deleteIssue,
   getAllIssues,
   getIssueById,
   updateIssue,
@@ -117,6 +118,27 @@ export const updateIssueController = async (req: Request, res: Response) => {
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Failed to update issue";
+    sendError(res, StatusCodes.INTERNAL_SERVER_ERROR, message);
+  }
+};
+
+
+// Delete Issue
+export const deleteIssueController = async (req: Request, res: Response) => {
+  try {
+    const id = parseInt(String(req.params["id"] ?? "0"));
+
+    const existing = await getIssueById(id);
+    if (!existing) {
+      sendError(res, StatusCodes.NOT_FOUND, "Issue not found");
+      return;
+    }
+
+    await deleteIssue(id);
+    sendSuccess(res, StatusCodes.OK, "Issue deleted successfully");
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Failed to delete issue";
     sendError(res, StatusCodes.INTERNAL_SERVER_ERROR, message);
   }
 };
