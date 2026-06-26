@@ -7,7 +7,6 @@ import {
   getAllIssues,
   getIssueById,
   updateIssue,
- 
 } from "./issues.services";
 
 // Create Issue
@@ -56,8 +55,7 @@ export const getAllIssuesController = async (req: Request, res: Response) => {
   }
 };
 
-
-// Get Single Issue 
+// Get Single Issue
 export const getIssueByIdController = async (req: Request, res: Response) => {
   try {
     const id = parseInt(String(req.params["id"] ?? "0"));
@@ -76,7 +74,7 @@ export const getIssueByIdController = async (req: Request, res: Response) => {
   }
 };
 
-// Update Issue 
+// Update Issue
 export const updateIssueController = async (req: Request, res: Response) => {
   try {
     const id = parseInt(String(req.params["id"] ?? "0"));
@@ -121,7 +119,6 @@ export const updateIssueController = async (req: Request, res: Response) => {
     sendError(res, StatusCodes.INTERNAL_SERVER_ERROR, message);
   }
 };
-
 
 // Delete Issue
 export const deleteIssueController = async (req: Request, res: Response) => {

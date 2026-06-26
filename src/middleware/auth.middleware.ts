@@ -3,35 +3,26 @@ import jwt from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
 import config from "../config";
 import { sendError } from "../utils/sendResponse";
+import type { JwtPayload } from "../types/user.types";
 
-
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        id: number;
-        name: string;
-        role: "contributor" | "maintainer";
-      };
-    }
-  }
-}
-
-export const authenticate = (req: Request, res: Response, next: NextFunction) => {
-
+export const authenticate = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const token = req.headers["authorization"];
 
   if (!token) {
-    sendError(res, StatusCodes.UNAUTHORIZED, "Access denied. No token provided.");
+    sendError(
+      res,
+      StatusCodes.UNAUTHORIZED,
+      "Access denied. No token provided.",
+    );
     return;
   }
 
   try {
-    const decoded = jwt.verify(token, config.secret as string) as {
-      id: number;
-      name: string;
-      role: "contributor" | "maintainer";
-    };
+    const decoded = jwt.verify(token, config.secret as string) as JwtPayload;
 
     req.user = decoded;
     next();

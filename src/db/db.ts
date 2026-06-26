@@ -35,7 +35,7 @@ export const initDB = async () => {
       )
     `);
 
-    console.log(" Database connected & tables ready!");
+    console.log(" Database connected!");
   } catch (error) {
     console.error(" DB Error:", error);
     process.exit(1);

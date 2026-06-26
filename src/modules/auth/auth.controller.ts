@@ -2,18 +2,14 @@ import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { sendError, sendSuccess } from "../../utils/sendResponse";
 import { loginUser, registerUser } from "./auth.service";
+import type { LoginBody, SignupBody } from "../../types/user.types";
 
 
 
 // Signup Controller 
 export const signup = async (req: Request, res: Response) => {
   try {
-    const { name, email, password, role } = req.body as {
-      name: string;
-      email: string;
-      password: string;
-      role: "contributor" | "maintainer";
-    };
+    const { name, email, password, role } = req.body as SignupBody 
 
     // Basic validation
     if (!name || !email || !password) {
@@ -33,10 +29,7 @@ export const signup = async (req: Request, res: Response) => {
 // Login Controller 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body as {
-      email: string;
-      password: string;
-    };
+    const { email, password } = req.body as LoginBody; 
 
     if (!email || !password) {
       sendError(res, StatusCodes.BAD_REQUEST, "Email and password are required");
