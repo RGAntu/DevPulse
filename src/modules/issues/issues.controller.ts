@@ -8,15 +8,12 @@ import {
   getIssueById,
   updateIssue,
 } from "./issues.services";
+import type { createTypeIssue, GetSortTypeStatus } from "../../types/user.types";
 
 // Create Issue
 export const createIssueController = async (req: Request, res: Response) => {
   try {
-    const { title, description, type } = req.body as {
-      title: string;
-      description: string;
-      type: "bug" | "feature_request";
-    };
+    const { title, description, type } = req.body as createTypeIssue;
 
     if (!title || !description || !type) {
       sendError(
@@ -40,11 +37,7 @@ export const createIssueController = async (req: Request, res: Response) => {
 // Get All Issues
 export const getAllIssuesController = async (req: Request, res: Response) => {
   try {
-    const { sort, type, status } = req.query as {
-      sort?: string;
-      type?: string;
-      status?: string;
-    };
+    const { sort, type, status } = req.query as GetSortTypeStatus;
 
     const data = await getAllIssues(sort, type, status);
     sendSuccess(res, StatusCodes.OK, "Issues retrived successfully", data);

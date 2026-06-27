@@ -29,3 +29,15 @@ export interface JwtPayload {
   name: string;
   role: UserRole;
 }
+
+export interface GetSortTypeStatus {
+  sort?: string;
+  type?: string;
+  status?: string;
+}
+
+export interface createTypeIssue {
+  title: string;
+  description: string;
+  type: "bug" | "feature_request";
+}
