@@ -36,7 +36,7 @@ export interface GetSortTypeStatus {
   status?: string;
 }
 
-export interface createTypeIssue {
+export interface TypeIssue {
   title: string;
   description: string;
   type: "bug" | "feature_request";

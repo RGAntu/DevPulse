@@ -8,12 +8,12 @@ import {
   getIssueById,
   updateIssue,
 } from "./issues.services";
-import type { createTypeIssue, GetSortTypeStatus } from "../../types/user.types";
+import type { GetSortTypeStatus, TypeIssue } from "../../types/user.types";
 
 // Create Issue
 export const createIssueController = async (req: Request, res: Response) => {
   try {
-    const { title, description, type } = req.body as createTypeIssue;
+    const { title, description, type } = req.body as TypeIssue;
 
     if (!title || !description || !type) {
       sendError(
@@ -71,11 +71,7 @@ export const getIssueByIdController = async (req: Request, res: Response) => {
 export const updateIssueController = async (req: Request, res: Response) => {
   try {
     const id = parseInt(String(req.params["id"] ?? "0"));
-    const { title, description, type } = req.body as {
-      title?: string;
-      description?: string;
-      type?: string;
-    };
+    const { title, description, type } = req.body as TypeIssue;
 
     const existing = await getIssueById(id);
     if (!existing) {
